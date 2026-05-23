@@ -241,7 +241,7 @@
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-6 col-md-3 mb-4">
+            <div class="col-6 col-md-3 mb-2 px-1">
                 <div class="card product-card shadow-sm h-100">
                     <a asp-action="Detail" asp-route-id="@item.Id" style="text-decoration:none;">
                         <img src="@item.ImageUrl" class="card-img-top"
