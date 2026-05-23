@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Welcome Back - Login";
+}
+
+<style>
+    .auth-card {
+        border: 1px solid #eff0f5;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(11, 46, 51, 0.05);
+        background: #fff;
+        max-width: 420px;
+        margin: 60px auto;
+    }
+
+    .btn-login-submit {
+        background-color: #0B2E33;
+        color: white;
+        font-weight: bold;
+        transition: all 0.2s ease;
+    }
+
+        .btn-login-submit:hover {
+            background-color: #4F7C82;
+            color: white;
+        }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .eye-toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #9e9e9e;
+        cursor: pointer;
+        font-size: 16px;
+        z-index: 10;
+        padding: 0;
+    }
+
+        .eye-toggle-btn:hover {
+            color: #0B2E33;
+        }
+</style>
+
+<div class="container">
+    <div class="card auth-card p-4">
+        <h3 class="text-center font-weight-bold text-dark mb-4">Welcome Back</h3>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success text-center small mb-3">
+                ✓ @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center small mb-3">
+                ⚠️ @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <form asp-action="Login" method="post" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+            <div class="mb-3">
+                <label class="form-label text-secondary small font-weight-bold">Email Address</label>
+                <input type="email" name="email" class="form-control" style="border-radius: 6px;" placeholder="enter registered email address" autocomplete="off" required />
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label text-secondary small font-weight-bold">Secure Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="loginPasswordField" name="password" class="form-control" style="border-radius: 6px; padding-right: 40px;" placeholder="••••••••" autocomplete="new-password" required />
+                    <button type="button" class="eye-toggle-btn" onclick="toggleLoginPasswordMask()">👁️</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-login-submit w-100 py-2 mb-2" style="border-radius: 6px;">Sign In</button>
+            <div class="text-center mt-3">
+                <span class="text-muted small">New to DarazMall?</span>
+                <a href="/Account/Register" class="small text-decoration-none font-weight-bold" style="color: #4F7C82;">Create an account</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleLoginPasswordMask() {
+        var passwordInput = document.getElementById("loginPasswordField");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>

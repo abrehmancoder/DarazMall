@@ -1,0 +1,186 @@
+﻿@model List<WebApplication1.Models.CartItem>
+@{
+    ViewData["Title"] = "Your Shopping Cart";
+}
+<style>
+    .cart-box {
+        border: 1px solid #eff0f5;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(11, 46, 51, 0.03);
+    }
+
+    .checkout-form-panel {
+        border-left: 2px solid #eff0f5;
+    }
+
+    .btn-place-order {
+        background-color: #0B2E33;
+        color: white;
+        font-weight: bold;
+        transition: all 0.2s;
+        border: none;
+    }
+
+        .btn-place-order:hover {
+            background-color: #4F7C82;
+            color: white;
+        }
+
+    .payment-sub-card {
+        background-color: #fcfcfc;
+        border: 1px dashed #93B1B5;
+        border-radius: 8px;
+        display: none;
+    }
+
+    .btn-remove-single {
+        color: #dc3545;
+        background: transparent;
+        border: none;
+        font-size: 16px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-remove-single:hover {
+            background-color: #ffeef0;
+            transform: scale(1.1);
+        }
+
+    .qty-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #0B2E33;
+        background: white;
+        color: #0B2E33;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .qty-btn:hover {
+            background: #0B2E33;
+            color: white;
+        }
+</style>
+
+<div class="container mt-4 flex-grow-1">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-dark fw-bold mb-0" style="font-size:24px;">🛒 Shopping Cart Checkout</h2>
+        @if (Model != null && Model.Count > 0)
+        {
+            <form asp-action="ClearCart" method="post">
+                <button type="submit" class="btn btn-sm btn-outline-danger" style="border-radius:6px;">Empty Cart</button>
+            </form>
+        }
+    </div>
+
+    @if (TempData["OrderSuccess"] != null)
+    {
+        <div class="alert alert-success text-center fw-bold py-2 mb-4">✓ @TempData["OrderSuccess"]</div>
+    }
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert text-center fw-bold py-2 mb-4" style="background-color:#B8E3E9; color:#0B2E33; border:none; border-radius:6px;">✓ @TempData["CartMessage"]</div>
+    }
+
+    <div class="row g-4 cart-box p-4">
+        <div class="col-md-6">
+            <h5 class="fw-bold mb-3" style="color:#4F7C82;">Selected Items (@(Model?.Count ?? 0))</h5>
+            @if (Model != null && Model.Count > 0)
+            {
+                <div style="max-height:380px; overflow-y:auto; padding-right:5px;">
+                    @foreach (var item in Model)
+                    {
+                        <div class="d-flex align-items-center justify-content-between p-3 border rounded mb-2" style="background:#fafafa;">
+                            <div class="d-flex align-items-center gap-3" style="max-width:55%;">
+                                <img src="@item.Product.ImageUrl" style="width:50px; height:50px; object-fit:contain; background:#fff; border-radius:6px; padding:2px;" />
+                                <div>
+                                    <h6 class="text-dark fw-bold mb-0" style="font-size:13px;">@item.Product.Name</h6>
+                                    <span class="text-muted" style="font-size:11px;">@item.Product.Category</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center gap-1">
+                                    <input type="hidden" name="id" value="@item.Product.Id" />
+                                    <button type="submit" name="quantity" value="@(item.Quantity - 1)" class="qty-btn">−</button>
+                                    <span class="fw-bold" style="min-width:24px; text-align:center;">@item.Quantity</span>
+                                    <button type="submit" name="quantity" value="@(item.Quantity + 1)" class="qty-btn">+</button>
+                                </form>
+                                <span class="fw-bold" style="color:#4F7C82; font-size:13px;">Rs. @((item.Product.Price * item.Quantity).ToString("N0"))</span>
+                                <form asp-action="RemoveFromCart" asp-route-id="@item.Product.Id" method="post">
+                                    <button type="submit" class="btn-remove-single">🗑️</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <span class="h5 text-dark fw-bold">Total:</span>
+                    <span class="h4 fw-bold" style="color:#0B2E33;">Rs. @(ViewBag.Subtotal?.ToString("N0"))</span>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <p class="text-muted">Cart is empty.</p>
+                    <a href="/Products/Shop" class="btn btn-sm btn-outline-secondary px-4 mt-2" style="border-radius:6px;">Continue Shopping</a>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-6 checkout-form-panel ps-md-4">
+            <h5 class="fw-bold mb-3" style="color:#4F7C82;">Shipping & Payment</h5>
+            @if (Model != null && Model.Count > 0)
+            {
+                <form asp-action="PlaceOrder" method="post">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Full Name</label>
+                        <input type="text" name="fullName" class="form-control" style="border-radius:6px;" placeholder="e.g. Abdul Rehman Malik" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Phone</label>
+                        <input type="tel" name="phone" class="form-control" style="border-radius:6px;" placeholder="e.g. 03001234567" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Delivery Address</label>
+                        <textarea name="address" class="form-control" rows="2" style="border-radius:6px;" placeholder="Street, City, Punjab..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Payment Method</label>
+                        <select name="paymentMethod" id="paymentMethodSelect" class="form-select" style="border-radius:6px;" onchange="togglePaymentFields(this.value)">
+                            <option value="COD">Cash on Delivery (COD)</option>
+                            <option value="ONLINE">Online Payment</option>
+                        </select>
+                    </div>
+                    <div id="onlinePaymentFields" class="p-3 mb-4 payment-sub-card">
+                        <h6 class="fw-bold text-dark mb-2" style="font-size:13px;">Online Payment Details</h6>
+                        <select class="form-select form-select-sm mb-2">
+                            <option>Easypaisa</option>
+                            <option>JazzCash</option>
+                            <option>HBL</option>
+                            <option>Visa/MasterCard</option>
+                        </select>
+                        <input type="text" class="form-control form-control-sm mb-2" placeholder="Account Title" />
+                        <input type="text" class="form-control form-control-sm" placeholder="Account Number" />
+                    </div>
+                    <button type="submit" class="btn btn-place-order w-100 py-2" style="border-radius:6px; font-size:15px;">
+                        ✅ Confirm & Place Order
+                    </button>
+                </form>
+            }
+            else
+            {
+                <button type="button" class="btn btn-secondary w-100 py-2 disabled" style="border-radius:6px;">Cart is Empty</button>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePaymentFields(val) {
+        document.getElementById("onlinePaymentFields").style.display = val === "ONLINE" ? "block" : "none";
+    }
+</script>

@@ -1,0 +1,48 @@
+﻿@model WebApplication1.Models.Product
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow-sm p-4" style="border-radius: 12px; border: 1px solid #eff0f5;">
+        <h4 class="mb-4 fw-bold" style="color: #0B2E33;">Edit Product</h4>
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedByEmail" />
+
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Product Name</label>
+                <input asp-for="Name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Price (Rs.)</label>
+                <input asp-for="Price" type="number" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Category</label>
+                <input asp-for="Category" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold text-secondary small">Current Image</label><br />
+                <img src="@Model.ImageUrl" style="height: 80px; object-fit: contain; border-radius: 6px; background: #fafafa; padding: 4px; border: 1px solid #eff0f5;" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary small">Change Image (optional)</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+            </div>
+            <button type="submit" class="btn w-100 py-2 fw-bold text-white"
+                    style="background-color: #0B2E33; border-radius: 8px;">
+                Save Changes
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2" style="border-radius: 8px;">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>

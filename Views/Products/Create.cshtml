@@ -1,0 +1,40 @@
+﻿@model WebApplication1.Models.Product
+@{
+    ViewData["Title"] = "Add New Product";
+}
+<div class="container mt-5" style="max-width:600px;">
+    <div class="card shadow-sm p-4" style="border-radius:12px; border:1px solid #eff0f5;">
+        <h4 class="mb-4 fw-bold" style="color:#0B2E33;">Add New Product</h4>
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Product Name</label>
+                <input asp-for="Name" class="form-control" placeholder="e.g. Samsung Galaxy S24" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Price (Rs.)</label>
+                <input asp-for="Price" type="number" class="form-control" placeholder="e.g. 85000" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Category</label>
+                <input asp-for="Category" class="form-control" placeholder="e.g. Electronics" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Product details..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Image URL (optional)</label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://example.com/image.jpg" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary small">OR Upload Image</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+            </div>
+            <button type="submit" class="btn w-100 py-2 fw-bold text-white"
+                    style="background-color:#0B2E33; border-radius:8px;">
+                Publish Product
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2" style="border-radius:8px;">Cancel</a>
+        </form>
+    </div>
+</div>

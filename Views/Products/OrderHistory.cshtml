@@ -1,0 +1,76 @@
+﻿@model List<WebApplication1.Models.Order>
+@{
+    ViewData["Title"] = "Order History";
+}
+<style>
+    .order-card {
+        border: 1px solid #eff0f5;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(11,46,51,0.04);
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-delivered {
+        background: #d1e7dd;
+        color: #0f5132;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4" style="color:#0B2E33;">📦 Order History</h2>
+
+    @if (TempData["OrderSuccess"] != null)
+    {
+        <div class="alert alert-success fw-bold">✓ @TempData["OrderSuccess"]</div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="text-center py-5">
+            <p class="text-muted">No orders yet.</p>
+            <a href="/Products/Shop" class="btn fw-bold text-white px-4" style="background:#0B2E33; border-radius:8px;">Start Shopping</a>
+        </div>
+    }
+    else
+    {
+        @foreach (var order in Model)
+        {
+            <div class="order-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h6 class="fw-bold mb-0" style="color:#0B2E33;">Order #@order.Id</h6>
+                        <small class="text-muted">@order.OrderDate.ToString("dd MMM yyyy, hh:mm tt")</small>
+                    </div>
+                    <span class="@(order.Status == "Delivered" ? "status-delivered" : "status-pending")">
+                        @order.Status
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-1 small"><strong>Name:</strong> @order.UserName</p>
+                        <p class="mb-1 small"><strong>Phone:</strong> @order.Phone</p>
+                        <p class="mb-1 small"><strong>Address:</strong> @order.ShippingAddress</p>
+                        <p class="mb-1 small"><strong>Payment:</strong> @order.PaymentMethod</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1 small"><strong>Products:</strong> @order.ProductNames</p>
+                        <h5 class="fw-bold mt-2" style="color:#4F7C82;">Total: Rs. @order.TotalAmount.ToString("N0")</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

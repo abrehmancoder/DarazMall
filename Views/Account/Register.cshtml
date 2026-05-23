@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Create Account";
+}
+
+<style>
+    .auth-card {
+        border: 1px solid #eff0f5;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(11, 46, 51, 0.05);
+        background: #fff;
+        max-width: 450px;
+        margin: 40px auto;
+    }
+
+    .btn-register-submit {
+        background-color: #4F7C82;
+        color: white;
+        font-weight: bold;
+        transition: all 0.2s ease;
+    }
+
+        .btn-register-submit:hover {
+            background-color: #0B2E33;
+            color: white;
+        }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .eye-toggle-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #9e9e9e;
+        cursor: pointer;
+        font-size: 16px;
+        z-index: 10;
+        padding: 0;
+    }
+</style>
+
+<div class="container">
+    <div class="card auth-card p-4">
+        <h3 class="text-center font-weight-bold text-dark mb-4">Create Account</h3>
+
+        <form asp-action="Register" method="post" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+            <input type="text" style="display:none" />
+            <input type="password" style="display:none" />
+
+            <div class="mb-3">
+                <label class="form-label text-secondary small font-weight-bold">Full Name</label>
+                <input type="text" name="fullName" class="form-control" style="border-radius: 6px;" placeholder="e.g. Abdul Rehman Malik" autocomplete="off" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-secondary small font-weight-bold">Email Address</label>
+                <input type="email" name="email" class="form-control" style="border-radius: 6px;" placeholder="enter specific email token setup" autocomplete="off" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-secondary small font-weight-bold">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="registerPasswordField" name="password" class="form-control" style="border-radius: 6px; padding-right: 40px;" placeholder="Create secure key combination" autocomplete="new-password" required />
+                    <button type="button" class="eye-toggle-btn" onclick="toggleRegisterPasswordMask()">👁️</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label text-secondary small font-weight-bold">Account Type (Role Allocation)</label>
+                <select name="role" class="form-select" style="border-radius: 6px;">
+                    <option value="Customer">Regular Customer (User)</option>
+                    <option value="Admin">Store System Vendor Admin (Admin)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-register-submit w-100 py-2" style="border-radius: 6px;">Sign Up</button>
+            <div class="text-center mt-3">
+                <span class="text-muted small">Already have an account?</span>
+                <a href="/Account/Login" class="small text-decoration-none font-weight-bold" style="color: #0B2E33;">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleRegisterPasswordMask() {
+        var passwordInput = document.getElementById("registerPasswordField");
+        if (passwordInput.type === "password") passwordInput.type = "text";
+        else passwordInput.type = "password";
+    }
+</script>

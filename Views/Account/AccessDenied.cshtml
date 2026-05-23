@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Access Denied - Restricted";
+}
+
+<div class="container text-center mt-5" style="max-width: 550px;">
+    <div class="card shadow border-0 p-5" style="border-radius: 16px; background-color: #fff;">
+        <div class="mb-4">
+            <span style="font-size: 70px;">🛑</span>
+        </div>
+        <h2 class="font-weight-bold text-danger mb-3" style="letter-spacing: -0.5px;">Restricted Access Area</h2>
+        <p class="text-secondary mb-4" style="font-size: 15px; line-height: 1.6;">
+            Sorry, you do not have administrative privileges to access this control panel. This gate is strictly monitored and reserved for <strong>admin@daraz.com</strong> management only.
+        </p>
+        <div class="d-grid gap-2">
+            <a asp-controller="Products" asp-action="Shop" class="btn text-white py-2 font-weight-bold" style="background-color: #4F7C82; border-radius: 8px;">Back to Secure Shopping</a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-light py-2 text-dark font-weight-bold" style="border: 1px solid #93B1B5; border-radius: 8px;">Login as Admin</a>
+        </div>
+    </div>
+</div>

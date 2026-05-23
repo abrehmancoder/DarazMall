@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Daraz Clone</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        .navbar {
+            background-color: #0B2E33 !important;
+        }
+
+        .product-card:hover {
+            border-color: #4F7C82 !important;
+        }
+
+        .premium-footer {
+            background-color: #0B2E33;
+            color: #B8E3E9;
+            font-size: 14px;
+            margin-top: 80px;
+        }
+
+            .premium-footer a {
+                color: #93B1B5;
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+
+                .premium-footer a:hover {
+                    color: #ffffff;
+                }
+
+        .footer-heading {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        @@media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 16px !important;
+            }
+
+            .premium-footer {
+                padding: 30px 15px !important;
+                margin-top: 40px;
+            }
+
+                .premium-footer .row > div {
+                    margin-bottom: 20px;
+                }
+
+            .container-fluid {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+
+            .nav-link {
+                font-size: 13px;
+                padding: 6px 8px !important;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 14px !important;
+            }
+
+            .footer-heading {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100" style="background-color: #fafafa;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand text-white fw-bold"
+                   style="font-size:22px; letter-spacing:0.5px;"
+                   asp-controller="Products" asp-action="Shop">
+                    🛒 Daraz<span style="color:#B8E3E9;">Mall</span>
+                </a>
+                <button class="navbar-toggler navbar-dark" type="button"
+                        data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white mx-1 fw-bold"
+                               asp-controller="Products" asp-action="Shop">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white mx-1 fw-bold"
+                               asp-controller="Products" asp-action="Cart">Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white mx-1 fw-bold"
+                               asp-controller="Products" asp-action="OrderHistory">My Orders</a>
+                        </li>
+                        @if (Context.Session.GetString("UserRole") == "Admin" ||
+                                                Context.Session.GetString("UserRole") == "SuperAdmin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50 mx-1 small"
+                                   asp-controller="Products" asp-action="Index">Admin Panel</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("UserEmail") != null)
+                        {
+                            <li class="nav-item d-flex align-items-center">
+                                <span class="text-white me-2 small fw-bold">
+                                    Hi, @Context.Session.GetString("UserName")
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold btn btn-sm px-3"
+                                   style="background-color:#4F7C82; border-radius:4px;"
+                                   asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold"
+                                   asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold btn btn-sm px-3"
+                                   style="background-color:#4F7C82; border-radius:4px;"
+                                   asp-controller="Account" asp-action="Register">Sign Up</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid px-4 flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="premium-footer pt-5 pb-4 border-top border-secondary border-opacity-10">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="footer-heading">🛒 DarazMall</h5>
+                    <p class="text-white-50 small" style="line-height:1.6;">
+                        Pakistan's premium localized e-commerce store experience.
+                        Built with high-end architecture, fluid transitions,
+                        and a secure shopping delivery infrastructure.
+                    </p>
+                </div>
+                <div class="col-6 col-md-3 offset-md-1">
+                    <h5 class="footer-heading">Customer Care</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a href="#" onclick="alert('Help Center Coming Soon!')">Help Center</a></li>
+                        <li><a href="#" onclick="alert('Track Order Feature Coming Soon!')">How to Buy & Track</a></li>
+                        <li><a href="#" onclick="alert('Corporate Shipping Policy')">Corporate & Bulk Shipping</a></li>
+                        <li><a href="#" onclick="alert('Returns & Refunds Active Support')">Returns & Refunds</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4">
+                    <h5 class="footer-heading">Secure Framework Guarantee</h5>
+                    <p class="text-white-50 small mb-2">✓ Verified ASP.NET Core Database Syncing</p>
+                    <p class="text-white-50 small">✓ Dynamic Session State Authentication Protected</p>
+                </div>
+            </div>
+            <hr class="mt-4 mb-3" style="border-color:#4F7C82 !important;" />
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <span class="small text-white-50">
+                    &copy; @DateTime.Now.Year DarazMall Clone Ecosystem. All Rights Reserved.
+                </span>
+                <span class="small fw-bold" style="color:#93B1B5;">
+                    Designed with ❤️ by Abdul Rehman
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
